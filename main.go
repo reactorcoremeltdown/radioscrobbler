@@ -62,7 +62,7 @@ func main() {
 						track := metadata[1]
 
 						if artist != "SomaFM" || artist != "SomaFM ID" {
-							log.Println("The current track will be scrobbled")
+							log.Println("The current track will be scrobbled: " + artist + ", " + track)
 						} else {
 							log.Println("The current track WILL NOT be scrobbled")
 						}
