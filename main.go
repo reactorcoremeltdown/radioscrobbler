@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/fhs/gompd/v2/mpd"
@@ -56,7 +57,7 @@ func main() {
 				fmt.Println(line)
 				if strings.HasPrefix(song["file"], "http") {
 					metadata := strings.Split(song["Title"], " - ")
-					if len(metadata) = 2 {
+					if len(metadata) == 2 {
 						artist := metadata[0]
 						track := metadata[1]
 
