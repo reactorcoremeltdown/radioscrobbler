@@ -32,6 +32,8 @@ func main() {
 	apikey := cfg.Section("api").Key("apikey").String()
 	apisecret := cfg.Section("api").Key("apisecret").String()
 
+	log.Println("DEBUG: username + apikey: " + username + ", " + apikey)
+
 	api := lastfm.New(apikey, apisecret)
 	err = api.Login(username, password)
 	logErr("Failed to login on LastFM", err)
