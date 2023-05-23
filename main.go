@@ -50,12 +50,24 @@ func main() {
 		}
 		if status["state"] == "play" {
 			line1 = fmt.Sprintf("%s - %s", song["file"], song["Title"])
-		} else {
-			line1 = fmt.Sprintf("State: %s", status["state"])
-		}
-		if line != line1 {
-			line = line1
-			fmt.Println(line)
+
+			if line != line1 {
+				line = line1
+				fmt.Println(line)
+				if strings.HasPrefix(song["file"], "http") {
+					metadata := strings.Split(song["Title"], " - ")
+					if len(metadata) = 2 {
+						artist := metadata[0]
+						track := metadata[1]
+
+						if artist != "SomaFM" || artist != "SomaFM ID" {
+							log.Println("The current track will be scrobbled")
+						} else {
+							log.Println("The current track WILL NOT be scrobbled")
+						}
+					}
+				}
+			}
 		}
 		time.Sleep(1e9)
 	}
