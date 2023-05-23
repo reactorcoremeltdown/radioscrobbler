@@ -29,8 +29,8 @@ func main() {
 
 	username := cfg.Section("last.fm").Key("username").String()
 	password := cfg.Section("last.fm").Key("password").String()
-	apikey := cfg.Section("api").Key("apikey").String()
-	apisecret := cfg.Section("api").Key("apisecret").String()
+	apikey := cfg.Section("api").Key("key").String()
+	apisecret := cfg.Section("api").Key("secret").String()
 
 	log.Println("DEBUG: username + apikey: " + username + ", " + apikey)
 
