@@ -32,8 +32,6 @@ func main() {
 	apikey := cfg.Section("api").Key("key").String()
 	apisecret := cfg.Section("api").Key("secret").String()
 
-	log.Println("DEBUG: username + apikey: " + username + ", " + apikey)
-
 	api := lastfm.New(apikey, apisecret)
 	err = api.Login(username, password)
 	logErr("Failed to login on LastFM", err)
@@ -51,7 +49,7 @@ func main() {
 			log.Fatalln(err)
 		}
 		if status["state"] == "play" {
-			line1 = fmt.Sprintf("%s - %s", song["Artist"], song["Title"])
+			line1 = fmt.Sprintf("%s - %s", song["file"], song["Title"])
 		} else {
 			line1 = fmt.Sprintf("State: %s", status["state"])
 		}
