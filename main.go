@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fhs/gompd/v2/mpd"
+	"github.com/shkh/lastfm-go/lastfm"
 	"gopkg.in/ini.v1"
 )
 
