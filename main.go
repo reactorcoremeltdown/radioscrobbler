@@ -63,6 +63,17 @@ func main() {
 
 						if artist != "SomaFM" || artist != "SomaFM ID" {
 							log.Println("The current track will be scrobbled: " + artist + ", " + track)
+
+							p := lastfm.P{"artist": artist, "track": track}
+							_, err = api.Track.UpdateNowPlaying(p)
+							logErr("Failed to update Now Playing status", err)
+							start := time.Now().Unix()
+							time.Sleep(35 * time.Second)
+							p["timestamp"] = start
+
+							_, err = api.Track.Scrobble(p)
+							logErr("Failed to scrobble Track", err)
+							log.Println("Scrobbling completed")
 						} else {
 							log.Println("The current track WILL NOT be scrobbled")
 						}
