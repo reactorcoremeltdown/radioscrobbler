@@ -61,7 +61,7 @@ func main() {
 						artist := metadata[0]
 						track := metadata[1]
 
-						if artist != "SomaFM" && artist != "SomaFM ID" {
+						if !strings.HasPrefix(artist, "SomaFM") {
 							log.Println("The current track will be scrobbled: " + artist + ", " + track)
 
 							p := lastfm.P{"artist": artist, "track": track}
