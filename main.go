@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -25,7 +26,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	cfg, err := ini.Load("/etc/mpdscribble.conf")
+	configPath := "/etc/mpdscribble.conf"
+
+	if os.Getenv("MPDSCRIBBLE_CONFIG") != "" {
+		configPath = os.Getenv("MPDSCRIBBLE_CONFIG")
+	}
+
+	cfg, err := ini.Load(configPath)
 	logErr("Failed to load mpdscribble config", err)
 
 	username := cfg.Section("last.fm").Key("username").String()
