@@ -5,6 +5,7 @@ Description=A scrobbler for internet radio stations, like SOMA FM
 Type=simple
 ExecStart=/usr/local/bin/radioscrobbler
 User=mpdscribble
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
