@@ -26,7 +26,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	configPath := "/etc/mpdscribble.conf"
+	configPath := "/etc/radioscrobbler.conf"
 
 	if os.Getenv("MPDSCRIBBLE_CONFIG") != "" {
 		configPath = os.Getenv("MPDSCRIBBLE_CONFIG")
