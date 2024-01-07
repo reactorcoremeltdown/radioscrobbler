@@ -1,0 +1,9 @@
+[Unit]
+Description=Multi-source and multi-destination audio scrobbler
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/radioscrobbler
+
+[Install]
+WantedBy=multi-user.target
