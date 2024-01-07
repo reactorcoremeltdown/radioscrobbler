@@ -24,3 +24,5 @@ password = ${PASSWORD}
 apikey = ${APIKEY}
 apisecret = ${APISECRET}
 EOF
+
+chmod 600 ${HOME}/.config/radioscrobbler/radioscrobbler.conf
