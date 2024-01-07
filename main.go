@@ -154,7 +154,7 @@ func main() {
 		macosconf  macosConfig
 		lastfmconf lastfmConfig
 	)
-	configPath := "/etc/radioscrobbler.conf"
+	configPath := os.Getenv("HOME") + "/.config/radioscrobbler/radioscrobbler.conf"
 
 	if os.Getenv("RADIOSCROBBLER_CONFIG") != "" {
 		configPath = os.Getenv("RADIOSCROBBLER_CONFIG")
