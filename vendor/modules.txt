@@ -1,0 +1,9 @@
+# github.com/fhs/gompd/v2 v2.3.0
+## explicit; go 1.11
+github.com/fhs/gompd/v2/mpd
+# github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
+## explicit
+github.com/shkh/lastfm-go/lastfm
+# gopkg.in/ini.v1 v1.67.0
+## explicit
+gopkg.in/ini.v1
