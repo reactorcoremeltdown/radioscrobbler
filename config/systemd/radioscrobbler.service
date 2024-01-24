@@ -5,6 +5,7 @@ Description=Multi-source and multi-destination audio scrobbler
 Type=simple
 Environment="RADIOSCROBBLER_CONFIG=/root/.config/radioscrobbler/radioscrobbler.conf"
 ExecStart=/usr/local/bin/radioscrobbler
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

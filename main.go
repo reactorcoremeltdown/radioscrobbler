@@ -195,12 +195,18 @@ func main() {
 		newTrack := <-updates
 		p := lastfm.P{"artist": newTrack.Artist, "track": newTrack.Title}
 		_, err = api.Track.UpdateNowPlaying(p)
-		logErr("Failed to update Now Playing status", err)
+		if err != nil {
+			log.Printf("Failed to update Now Playing status: %s\n", err.Error())
+			os.Exit(1)
+		}
 		start := time.Now().Unix()
 		time.Sleep(35 * time.Second)
 		p["timestamp"] = start
 		_, err = api.Track.Scrobble(p)
-		logErr("Failed to scrobble Track", err)
+		if err != nil {
+			log.Printf("Failed to scrobble track: %s\n", err.Error())
+			os.Exit(1)
+		}
 		log.Println("Scrobbling completed")
 	}
 }
