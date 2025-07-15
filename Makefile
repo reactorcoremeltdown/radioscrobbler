@@ -1,5 +1,5 @@
 OS := $(shell uname -s)
-DESTINATION := /opt/apps/blog/media/files/bin/ttclient
+DESTINATION := /opt/apps/blog/media/files/bin/radioscrobbler
 
 all: build
 
