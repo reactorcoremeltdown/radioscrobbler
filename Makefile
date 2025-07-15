@@ -15,7 +15,7 @@ brew:
 	GOOS=linux GOARCH=arm64 go build -o ${DESTINATION}/radioscrobbler-Linux-aarch64
 	GOOS=linux GOARCH=arm go build -o ${DESTINATION}/radioscrobbler-Linux-armv6l
 	
-ifeq($(OS), Darwin)
+ifeq ($(OS), Darwin)
 install: install_macos
 else
 install: install_linux
