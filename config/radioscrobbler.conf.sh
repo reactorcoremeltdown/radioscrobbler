@@ -15,7 +15,7 @@ host = 127.0.0.1
 port = 6600
 
 [source.macos]
-exec_path = /usr/local/bin//nowplaying-cli
+exec_path = /opt/homebrew/bin/media-control
 interval = 5
 
 [destination.lastfm]

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,6 +23,7 @@ type mpdConfig struct {
 type macosConfig struct {
 	ExecPath string
 	Interval int
+	App      string
 }
 type lastfmConfig struct {
 	Username  string
@@ -32,6 +35,14 @@ type lastfmConfig struct {
 type nowPlaying struct {
 	Artist string
 	Title  string
+}
+
+type macosPlaybackStatus struct {
+	Album            string `json:"album"`
+	BundleIdentifier string `json:"bundleIdentifier"`
+	Artist           string `json:"artist"`
+	Title            string `json:"title"`
+	Playing          bool   `json:"playing"`
 }
 
 func logErr(description string, err error) {
@@ -48,33 +59,38 @@ func getMacosStatus(macosconf macosConfig, updates chan nowPlaying) {
 	if _, err := os.Stat(macosconf.ExecPath); err == nil {
 		log.Println("Entered source.macos update loop")
 		for {
-			status, err := exec.Command(macosconf.ExecPath, "get", "playbackRate").Output()
+			status, err := exec.Command(macosconf.ExecPath, "get").Output()
 			if err != nil {
 				log.Println("Failed to query macos playback status: " + err.Error())
 			}
-			if strings.TrimSuffix(string(status), "\n") == "1" {
-				artist, err := exec.Command(macosconf.ExecPath, "get", "artist").Output()
-				if err != nil {
-					log.Println("Failed to get artist info from macos source: " + err.Error())
-				}
-				currentTrack.Artist = strings.TrimSuffix(string(artist), "\n")
-				title, err := exec.Command(macosconf.ExecPath, "get", "title").Output()
-				if err != nil {
-					log.Println("Failed to get song title info from macos source: " + err.Error())
-				}
-				currentTrack.Title = strings.TrimSuffix(string(title), "\n")
+			var currentMacosStatus macosPlaybackStatus
+			err = json.Unmarshal(status, &currentMacosStatus)
+			if err == nil {
+				if currentMacosStatus.Playing {
+					if currentMacosStatus.BundleIdentifier == "" || currentMacosStatus.BundleIdentifier == macosconf.App {
+						currentTrack.Artist = currentMacosStatus.Artist
+						currentTrack.Title = currentMacosStatus.Title
 
-				playbackString := currentTrack.Artist + " - " + currentTrack.Title
+						playbackString := currentTrack.Artist + " - " + currentTrack.Title
 
-				if previousPlaybackString != playbackString {
-					log.Println("Source macos updated song info to: " + playbackString)
-					previousPlaybackString = playbackString
-					updates <- currentTrack
-				}
-			} else {
-				if strings.TrimSuffix(string(status), "\n") != cachedStatus {
-					log.Println("source.macos is not playing any media. Current status is: " + string(status))
-					cachedStatus = strings.TrimSuffix(string(status), "\n")
+						if previousPlaybackString != playbackString {
+							log.Println("Scrobbling from " + currentMacosStatus.BundleIdentifier)
+							log.Println("Source macos updated song info to: " + playbackString)
+							previousPlaybackString = playbackString
+							updates <- currentTrack
+						}
+					} else {
+						if strings.TrimSuffix(string(status), "\n") != cachedStatus {
+							log.Println("App " + currentMacosStatus.BundleIdentifier + " is not allowed to scrobble")
+							log.Println("Allowed app is " + macosconf.App)
+							cachedStatus = strings.TrimSuffix(string(status), "\n")
+						}
+					}
+				} else {
+					if strings.TrimSuffix(string(status), "\n") != cachedStatus {
+						log.Println("source.macos is not playing any media. Current status is: " + strconv.FormatBool(currentMacosStatus.Playing))
+						cachedStatus = strings.TrimSuffix(string(status), "\n")
+					}
 				}
 			}
 			time.Sleep(time.Duration(macosconf.Interval) * time.Second)
@@ -171,6 +187,7 @@ func main() {
 	mpdconf.Port = cfg.Section("source.mpd").Key("port").String()
 	mpdconf.Password = cfg.Section("source.mpd").Key("password").String()
 	macosconf.ExecPath = cfg.Section("source.macos").Key("exec_path").String()
+	macosconf.App = cfg.Section("source.macos").Key("app").String()
 	macosconf.Interval, err = cfg.Section("source.macos").Key("interval").Int()
 	if err != nil {
 		log.Println("Failed to parse execution interval for source.macos, defaulting to 2 seconds")

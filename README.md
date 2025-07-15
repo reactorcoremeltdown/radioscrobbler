@@ -12,7 +12,7 @@ Grab an example from [here](https://github.com/reactorcoremeltdown/radioscrobble
 
 Currently working:
 
-+ source: macos native(use https://github.com/kirtan-shah/nowplaying-cli)
++ source: macos native(use https://github.com/ungive/media-control)
 + source: MPD
 + destination: last.fm
 
